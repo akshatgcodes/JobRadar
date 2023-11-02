@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.DS_Store
+
+# Generated output from running jobradar.py
+jobs_*.csv
