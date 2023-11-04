@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+  JobRadar local mock fixture.
+
+  This is a hand-written sample of what a typical job-board search-results
+  page looks like (structurally similar to sites like Naukri / LinkedIn /
+  Indeed search results), used so the scraper and scoring pipeline can be
+  developed and tested WITHOUT making uncontrolled live network requests to
+  a real job board. See README.md for how to point the scraper at a real
+  source instead of this fixture.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search results - Python Developer jobs in Bangalore</title>
+</head>
+<body>
+  <div id="search-results">
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Backend Engineer (Python)</h2>
+      <span class="job-company">Razorpay</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-12</span>
+      <div class="job-description">
+        We are looking for a Backend Engineer with strong experience in Python,
+        Django, and REST API design. You will work with PostgreSQL, Redis, and
+        Docker to build scalable payment infrastructure. Experience with AWS,
+        Kubernetes, and unit testing (pytest) is a big plus. Familiarity with
+        Git, CI/CD pipelines, and microservices architecture required. Knowledge
+        of SQL and system design fundamentals expected.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Python Developer - Integrations</h2>
+      <span class="job-company">Freshworks</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-13</span>
+      <div class="job-description">
+        Freshworks is hiring a Python Developer to build third-party integrations
+        using REST APIs and Flask. Strong grasp of Python, SQL, and Git is
+        required. You'll write automated tests with pytest, deploy via Docker,
+        and collaborate using Agile/Scrum practices. Experience with AWS or
+        GCP is a plus but not mandatory.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Associate - Python &amp; Django</h2>
+      <span class="job-company">Infosys</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-10</span>
+      <div class="job-description">
+        Entry level role for an Associate with basic knowledge of Python and
+        Django. Freshers welcome. Good communication skills and willingness to
+        learn required. Some exposure to SQL databases is helpful.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Senior Java Developer</h2>
+      <span class="job-company">TCS</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-11</span>
+      <div class="job-description">
+        Looking for a Senior Java Developer with expertise in Spring Boot,
+        Hibernate, and microservices. Experience with Kafka and Oracle DB
+        preferred. Java, J2EE, and REST API knowledge is mandatory.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Data Engineer - Python/Spark</h2>
+      <span class="job-company">Swiggy</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-14</span>
+      <div class="job-description">
+        Swiggy is looking for a Data Engineer proficient in Python, SQL, and
+        Apache Spark to build large-scale data pipelines. Experience with AWS,
+        Airflow, Docker, and Kubernetes is highly desirable. Strong understanding
+        of ETL processes and distributed systems required. Git and CI/CD
+        experience expected.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Frontend Developer (React)</h2>
+      <span class="job-company">Zoho</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-09</span>
+      <div class="job-description">
+        Zoho seeks a Frontend Developer skilled in React, JavaScript, HTML, and
+        CSS to build responsive web applications. Experience with Redux and
+        TypeScript is a plus. No backend experience required.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Backend Engineer (Python)</h2>
+      <span class="job-company">Razorpay</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-12</span>
+      <div class="job-description">
+        Duplicate listing (same role re-posted / picked up from a second source)
+        to demonstrate deduplication. We are looking for a Backend Engineer with
+        strong experience in Python, Django, and REST API design. You will work
+        with PostgreSQL, Redis, and Docker to build scalable payment
+        infrastructure. Experience with AWS, Kubernetes, and unit testing
+        (pytest) is a big plus.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Python Automation Engineer</h2>
+      <span class="job-company">Wipro</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-08</span>
+      <div class="job-description">
+        Wipro is hiring a Python Automation Engineer to write test automation
+        scripts using pytest and Selenium. Basic knowledge of Git and SQL
+        needed. No cloud experience necessary.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">DevOps Engineer</h2>
+      <span class="job-company">Flipkart</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-07</span>
+      <div class="job-description">
+        Flipkart needs a DevOps Engineer with strong skills in Docker,
+        Kubernetes, AWS, Terraform, and CI/CD pipelines. Scripting experience in
+        Python or Bash required. Git and monitoring tools (Prometheus, Grafana)
+        experience preferred.
+      </div>
+    </div>
+
+    <div class="job-card" data-source="mockboard">
+      <h2 class="job-title">Machine Learning Engineer</h2>
+      <span class="job-company">Myntra</span>
+      <span class="job-location">Bangalore, India</span>
+      <span class="job-date">2023-11-06</span>
+      <div class="job-description">
+        Myntra is looking for a Machine Learning Engineer with strong Python
+        skills, experience with pandas, scikit-learn, and TensorFlow. Knowledge
+        of SQL, Docker, and AWS for model deployment is required. Git and
+        REST API experience is a plus.
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
