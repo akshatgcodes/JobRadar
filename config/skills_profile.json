@@ -1,0 +1,22 @@
+{
+  "profile_name": "Python Backend / Data Roles",
+  "description": "Skills used to compute the fit score for each scraped job listing. Weight is optional (default 1.0) and lets you emphasize must-have skills over nice-to-haves.",
+  "skills": [
+    { "keyword": "python", "weight": 3.0 },
+    { "keyword": "django", "weight": 2.0 },
+    { "keyword": "flask", "weight": 1.5 },
+    { "keyword": "rest api", "weight": 2.0 },
+    { "keyword": "sql", "weight": 1.5 },
+    { "keyword": "postgresql", "weight": 1.5 },
+    { "keyword": "docker", "weight": 1.5 },
+    { "keyword": "kubernetes", "weight": 1.0 },
+    { "keyword": "aws", "weight": 1.5 },
+    { "keyword": "git", "weight": 1.0 },
+    { "keyword": "ci/cd", "weight": 1.0 },
+    { "keyword": "pytest", "weight": 1.0 },
+    { "keyword": "microservices", "weight": 1.0 },
+    { "keyword": "redis", "weight": 1.0 },
+    { "keyword": "pandas", "weight": 1.0 },
+    { "keyword": "system design", "weight": 1.0 }
+  ]
+}
