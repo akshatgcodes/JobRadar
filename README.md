@@ -170,3 +170,7 @@ python jobradar.py --role "Python Developer" --location "Bangalore"
 The second command should print a ranked table like the sample above and
 write a `jobs_<today's date>.csv` file in the project directory (this file
 is git-ignored since it's generated output).
+
+## Notes
+
+Built as a focused, single-purpose tool - a job-listing scraper with fit-score ranking, nothing more, nothing less.
