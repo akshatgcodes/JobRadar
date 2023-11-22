@@ -178,3 +178,9 @@ Built as a focused, single-purpose tool - a job-listing scraper with fit-score r
 ## Troubleshooting
 
 If something doesn't run as expected, double-check you're using the dependency versions noted above and running the exact commands from the "Run it" section.
+
+## Possible Improvements
+
+- More test coverage
+- Better error messages for edge cases
+- A cleaner CLI/UI polish pass
