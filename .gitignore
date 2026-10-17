@@ -10,3 +10,10 @@ env/
 
 # Generated output from running jobradar.py
 jobs_*.csv
+
+# Env files (keep the example)
+.env
+.env.local
+.env.*.local
+.env*
+!.env.example
