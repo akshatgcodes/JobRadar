@@ -38,7 +38,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
-DEFAULT_USER_AGENT = "JobRadarBot/1.0 (+https://example.com/jobradar; contact: akshattg2005@gmail.com)"
+DEFAULT_USER_AGENT = "JobRadarBot/1.0 (+https://jobradar.akshatgcodes.in; contact: akshatgcodes@gmail.com)"
 DEFAULT_RATE_LIMIT_SECONDS = 2.0
 DEFAULT_FIXTURE_PATH = Path(__file__).parent / "fixtures" / "sample_job_listings.html"
 
