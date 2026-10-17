@@ -1,198 +1,109 @@
-# JobRadar
+<p align="center">
+  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"
+       fill="none" stroke="#34d399" stroke-width="1.5"
+       stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"/><path d="M4 6h.01"/>
+    <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"/><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67"/>
+    <path d="M12 18h.01"/><path d="M17.99 11.66A6 6 0 0 1 15.77 16.67"/>
+    <circle cx="12" cy="12" r="2"/><path d="m13.41 10.59 5.66-5.66"/>
+  </svg>
+</p>
 
-A command-line tool that scrapes job listings by role and location, filters
-and deduplicates them, scores each one against a skills profile you define,
-and exports a ranked list to CSV. Run it daily to get a fresh, personalized
-shortlist instead of manually scrolling job boards.
+<h1 align="center">JobRadar</h1>
 
-- **Month:** November 2023
-- **Language:** Python
-- **Type:** CLI Tool
+<p align="center">
+  <strong>A job-listing scraper that filters, de-duplicates and ranks every listing by a weighted fit score against your skills, then exports a CSV.</strong>
+</p>
 
-## The X factor: fit score
+<p align="center">
+  <a href="https://jobradar.akshatgcodes.in">
+    <img src="https://img.shields.io/badge/project_page-34d399-34d399?style=flat-square" alt="Project page">
+  </a>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/BeautifulSoup-111111?style=flat-square" alt="BeautifulSoup">
+  <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white" alt="pandas">
+  <img src="https://img.shields.io/badge/license-GPL--3.0-34d399?style=flat-square" alt="License">
+</p>
 
-Every listing gets a **fit score** (0-100%) instead of just being sorted by
-date. The score is computed by `scoring.py`:
+---
 
-1. You define a skill profile in `config/skills_profile.json` — a list of
-   `{"keyword": ..., "weight": ...}` entries (e.g. `python` weight `3.0`,
-   `docker` weight `1.5`). Weight lets you tell JobRadar which skills matter
-   most to you.
-2. For each listing's scraped job description, every skill keyword is
-   checked with a case-insensitive, word-boundary regex (so `sql` won't
-   match inside `mysqlite`, and multi-word skills like `rest api` are
-   matched as a phrase).
-3. The fit score is:
+## What is JobRadar?
 
-   ```
-   fit_score = (sum of weights of skills FOUND in the description)
-               / (sum of weights of ALL skills in the profile)
-               * 100
-   ```
+Job boards sort by date, so the listing that actually fits you is buried under fifty that don't. JobRadar parses a results page, keeps listings that match your role and location, removes duplicates, and scores each one from 0–100% against a weighted skills profile you define. The best fits come first, and everything lands in a dated CSV.
 
-This is a real, deterministic weighted keyword-match algorithm — no random
-numbers involved. Results are sorted by this score, descending, so the 10
-most relevant listings float to the top instead of being buried in 50
-unsorted results. Edit `config/skills_profile.json` to match your own
-skills and the ranking changes accordingly.
-
-## Sample output
+> **Project page →** [jobradar.akshatgcodes.in](https://jobradar.akshatgcodes.in)
+> It's a CLI: `pip install -r requirements.txt && python jobradar.py --role "Python Developer" --location "Bangalore"`
 
 ```
-$ python jobradar.py --role "Python Developer" --location "Bangalore"
-
-Searching for "Python Developer" in "Bangalore"...
-
 Rank  Score  Company           Role
 1     89%    Razorpay          Backend Engineer (Python)
 2     49%    Freshworks        Python Developer - Integrations
 3     47%    Swiggy            Data Engineer - Python/Spark
-4     29%    Infosys           Associate - Python & Django
-5     29%    Wipro             Python Automation Engineer
-6     13%    TCS               Senior Java Developer
-7     0%     Zoho              Frontend Developer (React)
-
-📁 Full results exported to jobs_2026-09-15.csv
+📁 Full results exported to jobs_2026-10-18.csv
 ```
 
-(CSV filename is dated to the day you run it, e.g. `jobs_2023-11-14.csv` in
-the original spec's example.)
+---
 
-## Key concepts demonstrated
+## What you get
 
-- **BeautifulSoup + CSS selectors** (`scraper.py`) — parses `.job-card`
-  elements out of a job-board results page (`.job-title`, `.job-company`,
-  `.job-location`, `.job-date`, `.job-description`).
-- **Keyword matching / scoring algorithm** (`scoring.py`) — weighted,
-  regex-based, word-boundary keyword matching against a configurable skill
-  profile.
-- **pandas for dedup + CSV export** (`dedup.py`, `jobradar.py`) — listings
-  are loaded into a DataFrame, deduplicated on normalized
-  `(company, role)`, keeping the highest-scoring copy, and the final
-  ranked result set is exported with `DataFrame.to_csv(...)`.
-- **`robots.txt` awareness + rate limiting** (`scraper.py`) —
-  `is_scraping_allowed()` fetches and checks the target host's
-  `robots.txt` via `urllib.robotparser` before any live fetch, and
-  `fetch_live_html()` sleeps (`--rate-limit`, default 2s) before every
-  request so it never hammers a real server.
-- **Config-driven skill profiles** — `config/skills_profile.json` is a
-  plain JSON file you edit to change what JobRadar considers "relevant"
-  without touching any code.
+- **Fit score** — `sum(weights of skills found) / sum(all weights) × 100`, with word-boundary matching so `sql` doesn't match inside `mysqlite`.
+- **Your profile, your ranking** — edit `config/skills_profile.json` to change what counts and how much.
+- **De-duplication** — pandas drops repeats by normalised company + role and keeps the highest-scoring copy.
+- **Polite live mode** — `--live` checks `robots.txt` and waits between requests (2 s by default).
+- **CSV export** — every ranked listing, with matched skills, in `jobs_YYYY-MM-DD.csv`.
 
-## Important note on scraping design
+---
 
-By default, `jobradar.py` parses a **local HTML fixture**
-(`fixtures/sample_job_listings.html`) that was hand-written to look like a
-real job-board search-results page (same markup shape you'd see scraping
-a real listings/search page: repeated result cards with title, company,
-location, date, and description). This keeps the parsing → scoring →
-dedup → export pipeline fully real, testable, and runnable offline/in CI
-without doing uncontrolled live scraping of a real site in an agent
-sandbox (which would risk violating a site's ToS/rate limits and would be
-flaky with no network access).
+## Stack
 
-The live-fetch code path is fully implemented and functional — it's just
-not what the default demo run uses:
+| Layer | Tech |
+|---|---|
+| Language | Python 3.8+ |
+| Parsing | BeautifulSoup 4 with CSS selectors |
+| Data | pandas (de-dup, CSV export) |
+| HTTP | `requests` · `urllib.robotparser` |
+| Project page | Next.js 16 on Vercel · GoDaddy DNS |
 
-```bash
-python jobradar.py --role "Python Developer" --location "Bangalore" \
-    --live --source-url "https://example-job-board.com/search?..."
-```
+---
 
-When `--live` is passed, `scraper.fetch_live_html()`:
+## Engineering Decisions
 
-1. Looks up and parses that host's `robots.txt` and refuses to fetch if
-   disallowed for JobRadar's user-agent.
-2. Sleeps `--rate-limit` seconds (default 2s) before issuing the request.
-3. Fetches the page with `requests`, then hands the HTML to the exact same
-   `parse_listings_html()` BeautifulSoup parser used for the fixture.
+**Why a weighted keyword score instead of ML or an LLM?**
+It's deterministic and explainable. Every percentage is traceable to the skills that matched, and changing a weight changes the ranking in a way you can predict.
 
-To point JobRadar at a real job board, you would adjust the CSS selectors
-in `scraper.parse_listings_html()` (currently `.job-card`, `.job-title`,
-`.job-company`, `.job-location`, `.job-date`, `.job-description`) to match
-that site's actual HTML structure — the rest of the pipeline (scoring,
-dedup, ranking, export) needs no changes.
+**Why parse a local fixture by default?**
+The parse → score → de-dup → export pipeline runs offline and in CI with no network and no risk of breaking a site's terms. `--live` uses the exact same parser on a real page.
 
-## Project layout
+**Why filter broadly, then rank?**
+A listing passes if its title shares any significant word with your role query. Weak matches still show up, ranked low, which is how a real search box behaves.
 
-```
-JobRadar/
-├── jobradar.py               # CLI entry point (argparse: --role, --location, ...)
-├── scraper.py                 # BeautifulSoup parsing + robots.txt + rate-limited live fetch
-├── scoring.py                  # Fit-score algorithm (weighted keyword matching)
-├── dedup.py                    # pandas-based deduplication
-├── config/
-│   └── skills_profile.json     # Your skills, editable, drives the fit score
-├── fixtures/
-│   └── sample_job_listings.html  # Local mock job-board results page (demo/test data)
-├── requirements.txt
-└── README.md
-```
+**What would you do differently in v2?**
+Ship selector presets for a few real job boards, since today `--live` needs the CSS selectors adjusted per site.
 
-## Run it
+---
 
-**Requirements:** Python 3.8+
+## Docs
 
-```bash
-pip install -r requirements.txt
+| Document | Description |
+|---|---|
+| [PRD](docs/PRD.md) | Product requirements — goals, user stories, non-goals |
+| [Architecture](docs/ARCHITECTURE.md) | Pipeline, scoring maths, modules |
+| [Decisions](docs/DECISIONS.md) | Every major technical decision and why |
+| [Setup](docs/SETUP.md) | Install, every flag, live mode |
+| [Deploy](docs/DEPLOY.md) | How the project page is deployed |
+| [Contributing](CONTRIBUTING.md) | How to propose changes |
+| [Changelog](CHANGELOG.md) | What changed in each release |
+| [Security](SECURITY.md) | How to report a vulnerability |
 
-python jobradar.py --role "Python Developer" --location "Bangalore"
-```
+---
 
-### Useful flags
+<div align="center">
 
-| Flag | Default | Description |
-|---|---|---|
-| `--role` | *(required)* | Role to search for, e.g. `"Python Developer"` |
-| `--location` | *(required)* | Location to search in, e.g. `"Bangalore"` |
-| `--skills-config` | `config/skills_profile.json` | Skill profile used to compute fit scores |
-| `--fixture-path` | `fixtures/sample_job_listings.html` | Local HTML fixture to parse (used unless `--live`) |
-| `--live` | off | Fetch `--source-url` live instead of the fixture |
-| `--source-url` | — | Live job-board URL to scrape (requires `--live`) |
-| `--rate-limit` | `2.0` | Seconds to sleep before each live HTTP request |
-| `--top-n` | `10` | How many ranked rows to print to the console |
-| `--output-dir` | `.` | Directory to write the dated CSV export into |
+<h3>Akshat Gupta</h3>
 
-### Try a different skill profile
+<a href="https://akshatgcodes.in"><img src="https://img.shields.io/badge/Website-akshatgcodes.in-111111?style=flat-square&logo=googlechrome&logoColor=white" alt="Website"></a>
+<a href="https://linkedin.com/in/akshatgcodes"><img src="https://img.shields.io/badge/LinkedIn-akshatgcodes-0A66C2?style=flat-square" alt="LinkedIn"></a>
+<a href="https://github.com/akshatgcodes"><img src="https://img.shields.io/badge/GitHub-akshatgcodes-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub"></a>
+<a href="mailto:akshatgcodes@gmail.com"><img src="https://img.shields.io/badge/Email-akshatgcodes%40gmail.com-EA4335?style=flat-square&logo=gmail&logoColor=white" alt="Email"></a>
 
-Edit `config/skills_profile.json` (or copy it and pass
-`--skills-config your_profile.json`) to change which keywords/skills drive
-the fit score, then re-run the same command — the ranking will change to
-reflect your new profile.
-
-## Sanity-checking this project
-
-```bash
-python3 -m py_compile jobradar.py scraper.py scoring.py dedup.py
-python jobradar.py --role "Python Developer" --location "Bangalore"
-```
-
-The second command should print a ranked table like the sample above and
-write a `jobs_<today's date>.csv` file in the project directory (this file
-is git-ignored since it's generated output).
-
-## Notes
-
-Built as a focused, single-purpose tool - a job-listing scraper with fit-score ranking, nothing more, nothing less.
-
-## Troubleshooting
-
-If something doesn't run as expected, double-check you're using the dependency versions noted above and running the exact commands from the "Run it" section.
-
-## Possible Improvements
-
-- More test coverage
-- Better error messages for edge cases
-- A cleaner CLI/UI polish pass
-
-## Acknowledgements
-
-Thanks to the open-source libraries this project leans on - see the dependency list above for the full set.
-
-## License
-
-GPLv3 - see [LICENSE](LICENSE) for details.
-
-## Testing
-
-Manually tested via the sample commands above; no automated test suite yet.
+</div>
